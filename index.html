@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARS CoolPlay · SOP 三语言版</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2eb; --ink:#1c1a17; --ink2:#4a4740; --ink3:#8a8780;
+  --red:#c93a10; --orange:#d97706; --green:#1a6b3c;
+  --blue:#1a4fa0; --purple:#5e35b1; --teal:#0e7490;
+  --border:rgba(28,26,23,0.11);
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Noto Sans SC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.65;max-width:960px;margin:0 auto;padding:0 0 60px;}
+
+/* LANG SWITCHER */
+.lang-bar{
+  position:sticky;top:0;z-index:100;
+  background:var(--ink);
+  display:flex;align-items:center;
+  padding:10px 48px;gap:8px;
+  border-bottom:2px solid rgba(245,242,235,0.08);
+}
+.lang-bar-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,242,235,0.3);margin-right:8px;}
+.lang-btn{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:5px 14px;border-radius:2px;cursor:pointer;
+  border:1px solid rgba(245,242,235,0.15);
+  background:transparent;color:rgba(245,242,235,0.45);
+  transition:all 0.15s;
+}
+.lang-btn:hover{background:rgba(245,242,235,0.08);color:rgba(245,242,235,0.8);}
+.lang-btn.active{background:#f0b429;color:var(--ink);border-color:#f0b429;}
+
+/* LANGUAGE SECTIONS */
+.lang-section{display:none;}
+.lang-section.active{display:block;}
+
+/* HEADER */
+.hdr{background:var(--ink);color:var(--bg);padding:40px 48px 32px;position:relative;overflow:hidden;}
+.hdr::before{content:'SOP';font-family:var(--mono);font-size:180px;font-weight:600;color:rgba(245,242,235,0.03);position:absolute;right:-12px;top:-24px;line-height:1;user-select:none;letter-spacing:-8px;pointer-events:none;}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.hdr-brand{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#f0b429;}
+.hdr-meta{font-family:var(--mono);font-size:10px;color:rgba(245,242,235,0.3);text-align:right;line-height:1.9;}
+.hdr h1{font-size:clamp(22px,4vw,38px);font-weight:900;line-height:1.05;letter-spacing:-0.5px;margin-bottom:10px;}
+.hdr h1 em{color:#f0b429;font-style:normal;}
+.hdr-sub{font-size:12px;color:rgba(245,242,235,0.4);font-weight:300;max-width:520px;line-height:1.7;}
+.hdr-badges{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
+.badge{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.b1{background:rgba(201,58,16,0.2);color:#f07040;border:1px solid rgba(201,58,16,0.3);}
+.b2{background:rgba(217,119,6,0.2);color:#fbbf24;border:1px solid rgba(217,119,6,0.3);}
+.b3{background:rgba(14,116,144,0.2);color:#67e8f9;border:1px solid rgba(14,116,144,0.3);}
+.b4{background:rgba(94,53,177,0.2);color:#b39ddb;border:1px solid rgba(94,53,177,0.3);}
+.b5{background:rgba(26,107,60,0.2);color:#5db87a;border:1px solid rgba(26,107,60,0.3);}
+
+/* BODY */
+.body{padding:0 48px;}
+
+/* FLOW */
+.flow-wrap{margin-top:28px;background:#fff;border:1px solid var(--border);padding:24px;}
+.flow-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;}
+.flow{display:flex;align-items:stretch;gap:0;}
+.flow-step{flex:1;border:1px solid var(--border);padding:12px 8px;text-align:center;background:var(--bg);}
+.flow-step+.flow-step{border-left:none;}
+.fnum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;margin:0 auto 6px;}
+.f1 .fnum{background:rgba(201,58,16,0.12);color:var(--red);}
+.f2 .fnum{background:rgba(217,119,6,0.12);color:var(--orange);}
+.f3 .fnum{background:rgba(14,116,144,0.12);color:var(--teal);}
+.f4 .fnum{background:rgba(94,53,177,0.12);color:var(--purple);}
+.f5 .fnum{background:rgba(26,107,60,0.12);color:var(--green);}
+.fname{font-size:11px;font-weight:900;line-height:1.25;margin-bottom:2px;}
+.frole{font-size:9px;color:var(--ink3);font-family:var(--mono);}
+.farrow{display:flex;align-items:center;justify-content:center;width:18px;flex-shrink:0;font-size:13px;color:var(--ink3);}
+.flow-note{margin-top:12px;font-size:10px;color:var(--ink3);text-align:center;font-family:var(--mono);}
+
+/* ROLES */
+.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:4px;}
+.role{background:#fff;border:1px solid var(--border);padding:14px 12px;}
+.rdot{width:8px;height:8px;border-radius:50%;margin-bottom:8px;}
+.rd1{background:var(--red);} .rd2{background:var(--orange);} .rd3{background:var(--teal);} .rd4{background:var(--purple);} .rd5{background:var(--green);}
+.rname{font-size:12px;font-weight:900;margin-bottom:1px;}
+.rtag{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.rduty{font-size:10.5px;color:var(--ink2);line-height:1.55;}
+
+/* SECTION */
+.sec{margin-top:28px;}
+.sec-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--ink);margin-bottom:14px;}
+.sec-n{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:3px;color:var(--ink3);}
+.sec-title{font-size:15px;font-weight:900;letter-spacing:-0.2px;}
+.sec-who{margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+.sw1{background:rgba(201,58,16,0.08);color:var(--red);border:1px solid rgba(201,58,16,0.2);}
+.sw2{background:rgba(217,119,6,0.08);color:var(--orange);border:1px solid rgba(217,119,6,0.2);}
+.sw3{background:rgba(14,116,144,0.08);color:var(--teal);border:1px solid rgba(14,116,144,0.2);}
+.sw4{background:rgba(94,53,177,0.08);color:var(--purple);border:1px solid rgba(94,53,177,0.2);}
+.sw5{background:rgba(26,107,60,0.08);color:var(--green);border:1px solid rgba(26,107,60,0.2);}
+.sw-all{background:rgba(28,26,23,0.06);color:var(--ink2);border:1px solid var(--border);}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:2px;}
+.step{display:grid;grid-template-columns:48px 1fr 56px;background:#fff;border:1px solid var(--border);border-left:3px solid #ddd;align-items:stretch;}
+.s1{border-left-color:var(--red);} .s2{border-left-color:var(--orange);} .s3{border-left-color:var(--teal);} .s4{border-left-color:var(--purple);} .s5{border-left-color:var(--green);}
+.snum{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink3);border-right:1px solid var(--border);}
+.sbody{padding:13px 15px;}
+.stitle{font-size:12.5px;font-weight:700;margin-bottom:3px;line-height:1.3;}
+.sdesc{font-size:11px;color:var(--ink2);line-height:1.65;}
+.scode{font-family:var(--mono);font-size:9.5px;color:var(--ink3);margin-top:6px;background:rgba(28,26,23,0.04);border-radius:2px;padding:4px 8px;line-height:1.7;}
+.swho{display:flex;align-items:center;justify-content:center;border-left:1px solid var(--border);padding:8px 5px;}
+.swho span{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);}
+.wt1{color:var(--red);} .wt2{color:var(--orange);} .wt3{color:var(--teal);} .wt4{color:var(--purple);} .wt5{color:var(--green);}
+
+/* WEEK */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:4px;}
+.wday{background:#fff;border:1px solid var(--border);padding:11px 8px;min-height:100px;}
+.wday.hl-red{background:rgba(201,58,16,0.03);border-color:rgba(201,58,16,0.2);}
+.wday.hl-green{background:rgba(26,107,60,0.03);border-color:rgba(26,107,60,0.2);}
+.wname{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--border);color:var(--ink3);}
+.hl-red .wname{color:var(--red);} .hl-green .wname{color:var(--green);}
+.ev{font-size:9px;padding:3px 5px;border-radius:2px;margin-bottom:3px;line-height:1.35;font-weight:700;}
+.ev1{background:rgba(201,58,16,0.1);color:var(--red);}
+.ev2{background:rgba(217,119,6,0.1);color:var(--orange);}
+.ev3{background:rgba(14,116,144,0.1);color:var(--teal);}
+.ev4{background:rgba(94,53,177,0.1);color:var(--purple);}
+.ev5{background:rgba(26,107,60,0.1);color:var(--green);}
+.ev-y{background:rgba(240,180,41,0.15);color:#92650a;}
+
+/* SETTLE */
+.settle{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:4px;}
+.sc{background:#fff;border:1px solid var(--border);padding:16px 18px;}
+.sct{font-size:12.5px;font-weight:900;margin-bottom:3px;}
+.scs{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
+.sci{font-size:11px;color:var(--ink2);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.55;}
+.sci:last-child{border-bottom:none;}
+.sci strong{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--ink);margin-right:3px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin-top:4px;}
+.tbl th{background:var(--ink);color:var(--bg);padding:9px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:left;font-family:var(--mono);font-weight:600;}
+.tbl td{padding:9px 12px;font-size:11.5px;border-bottom:1px solid var(--border);background:#fff;vertical-align:top;line-height:1.6;}
+.tbl td:first-child{font-weight:700;width:120px;}
+.tbl td:last-child{font-family:var(--mono);font-size:9.5px;color:var(--ink3);width:80px;}
+
+/* NOTICE */
+.notice{margin-top:4px;padding:14px 18px;border:1px solid rgba(201,58,16,0.2);background:rgba(201,58,16,0.03);border-left:4px solid var(--red);}
+.ntitle{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.notice ul{list-style:none;}
+.notice ul li{font-size:11px;color:var(--ink2);padding:3px 0;line-height:1.6;}
+.notice ul li::before{content:'— ';color:var(--red);font-family:var(--mono);}
+
+/* FOOTER */
+.ftr{margin-top:36px;padding:14px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.ftl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+.ftr-r{font-family:var(--mono);font-size:9px;color:var(--ink3);}
+
+@media(max-width:680px){
+  .lang-bar,.hdr,.body,.ftr{padding-left:16px;padding-right:16px;}
+  .roles{grid-template-columns:1fr 1fr;}
+  .week{grid-template-columns:repeat(3,1fr);}
+  .flow{flex-direction:column;}
+  .farrow{display:none;}
+  .settle{grid-template-columns:1fr;}
+  .step{grid-template-columns:40px 1fr;}
+  .swho{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- LANG SWITCHER -->
+<div class="lang-bar">
+  <span class="lang-bar-label">Language</span>
+  <button class="lang-btn active" onclick="switchLang('zh')">中文</button>
+  <button class="lang-btn" onclick="switchLang('en')">English</button>
+  <button class="lang-btn" onclick="switchLang('id')">Indonesia</button>
+</div>
+
+<!-- ═══════════════════════════════ 中文版 ═══════════════════════════════ -->
+<div class="lang-section active" id="lang-zh">
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-brand">MARS CoolPlay</div>
+    <div class="hdr-meta">文件编号：MC-SOP-001<br>版本：V3.0<br>生效日期：2025<br>适用：所有合作主播</div>
+  </div>
+  <h1>主播订货<br><em>标准操作流程</em></h1>
+  <p class="hdr-sub">规范主播每周订货、五级审批、每周结算的完整操作规范。运营：Bailin｜仓库：Gani｜主管：Marcia｜财务：Nendi</p>
+  <div class="hdr-badges">
+    <span class="badge b1">主播下单</span><span class="badge b2">运营确认</span>
+    <span class="badge b3">仓库审核</span><span class="badge b4">主管审批</span><span class="badge b5">财务确认</span>
+  </div>
+</div>
+<div class="body">
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">OVERVIEW</span><span class="sec-title">五级审批流程总览</span><span class="sec-who sw-all">完整链路</span></div>
+    <div class="flow-wrap">
+      <div class="flow-label">订单从提交到发货的完整审批链路</div>
+      <div class="flow">
+        <div class="flow-step f1"><div class="fnum">1</div><div class="fname">主播下单</div><div class="frole">Streamer</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f2"><div class="fnum">2</div><div class="fname">运营确认</div><div class="frole">Bailin</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f3"><div class="fnum">3</div><div class="fname">仓库审核</div><div class="frole">Gani</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f4"><div class="fnum">4</div><div class="fname">主管审批</div><div class="frole">Marcia</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f5"><div class="fnum">5</div><div class="fname">财务确认</div><div class="frole">Nendi</div></div>
+      </div>
+      <div class="flow-note">全部通过 → 安排发货 → 主播收货 → 周末结算</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">ROLES</span><span class="sec-title">各角色职责分工</span><span class="sec-who sw-all">责任矩阵</span></div>
+    <div class="roles">
+      <div class="role"><div class="rdot rd1"></div><div class="rname">主播</div><div class="rtag">Streamer</div><div class="rduty">官网自主下单，使用专属折扣码，提交后发 WhatsApp 通知 Bailin。</div></div>
+      <div class="role"><div class="rdot rd2"></div><div class="rname">Bailin</div><div class="rtag">运营</div><div class="rduty">核对订单产品、数量、折扣码，确认无误后推进至 Gani 审核。</div></div>
+      <div class="role"><div class="rdot rd3"></div><div class="rname">Gani</div><div class="rtag">仓库</div><div class="rduty">确认库存充足可按时发货，审核通过后推进至 Marcia 审批。</div></div>
+      <div class="role"><div class="rdot rd4"></div><div class="rname">Marcia</div><div class="rtag">主管</div><div class="rduty">审批订单合规性与折扣权限，最终批准或驳回订单。</div></div>
+      <div class="role"><div class="rdot rd5"></div><div class="rname">Nendi</div><div class="rtag">财务</div><div class="rduty">确认收款金额，标记付款状态，完成每周结算对账。</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 01</span><span class="sec-title">主播下单流程</span><span class="sec-who sw1">主播执行</span></div>
+    <div class="steps">
+      <div class="step s1"><div class="snum">1</div><div class="sbody"><div class="stitle">登录 marscoolplay.com 选择产品</div><div class="sdesc">进入官网浏览产品，选择款式和数量（单包 / 半盒 / 整箱），加入购物车。</div><div class="scode">可随时下单，周末统一处理</div></div><div class="swho"><span class="wt1">主播</span></div></div>
+      <div class="step s1"><div class="snum">2</div><div class="sbody"><div class="stitle">结账时输入专属折扣码</div><div class="sdesc">在折扣码栏输入批发折扣码，确认金额正确后继续。</div><div class="scode">折扣码由 Marcia 审批分配，不可共用｜忘记请联系 Bailin</div></div><div class="swho"><span class="wt1">主播</span></div></div>
+      <div class="step s1"><div class="snum">3</div><div class="sbody"><div class="stitle">填写收货信息并提交订单</div><div class="sdesc">填写收货地址和联系电话，选择银行转账付款，提交订单并记录订单编号。</div><div class="scode">订单编号格式：#XXXX</div></div><div class="swho"><span class="wt1">主播</span></div></div>
+      <div class="step s1"><div class="snum">4</div><div class="sbody"><div class="stitle">截图订单，发 WhatsApp 通知 Bailin</div><div class="sdesc">截取订单确认页截图，发至主播 WhatsApp 群通知运营处理。</div><div class="scode">格式：「订单 #XXXX｜产品：XXX｜数量：XX｜金额：Rp XXX」</div></div><div class="swho"><span class="wt1">主播</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 02</span><span class="sec-title">运营确认订单</span><span class="sec-who sw2">Bailin 执行</span></div>
+    <div class="steps">
+      <div class="step s2"><div class="snum">1</div><div class="sbody"><div class="stitle">登录 Shopify 核对订单信息</div><div class="sdesc">收到通知后登录 Shopify 后台，核对产品、数量、折扣码、收货地址是否正确。</div><div class="scode">处理时限：4 小时内｜有误立即通知主播修改</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+      <div class="step s2"><div class="snum">2</div><div class="sbody"><div class="stitle">通知 Gani 进行仓库审核</div><div class="sdesc">核对无误后，WhatsApp 群通知 Gani 审核库存，备注订单编号和需求到货时间。</div><div class="scode">不接受口头修改，所有修改须主播重新提交</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 03</span><span class="sec-title">仓库审核库存</span><span class="sec-who sw3">Gani 执行</span></div>
+    <div class="steps">
+      <div class="step s3"><div class="snum">1</div><div class="sbody"><div class="stitle">核实库存是否充足</div><div class="sdesc">在 Shopify 后台确认订单内每个 SKU 库存，判断是否可按时发货。</div><div class="scode">审核时限：2 小时内｜不足须立即反馈 Bailin</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s3"><div class="snum">2</div><div class="sbody"><div class="stitle">反馈审核结果给 Bailin</div><div class="sdesc">库存充足 → 回复「✓ 库存确认，可发货」，推进至 Marcia 审批。库存不足 → 通知 Bailin 联系主播处理。</div><div class="scode">充足 → 推进主管审批｜不足 → 返回 Bailin 处理</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 04</span><span class="sec-title">主管审批</span><span class="sec-who sw4">Marcia 执行</span></div>
+    <div class="steps">
+      <div class="step s4"><div class="snum">1</div><div class="sbody"><div class="stitle">审查订单合规性与折扣权限</div><div class="sdesc">确认折扣码使用在权限范围内，订单金额和产品类别符合合作协议，有无异常。</div><div class="scode">审批时限：4 小时内</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+      <div class="step s4"><div class="snum">2</div><div class="sbody"><div class="stitle">审批通过或驳回</div><div class="sdesc">通过 → 回复「✓ 主管审批通过」推进至 Nendi。驳回 → 注明原因，由 Bailin 通知主播。</div><div class="scode">通过 → 财务确认｜驳回 → 注明原因通知主播</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 05</span><span class="sec-title">财务确认与发货</span><span class="sec-who sw5">Nendi + Gani</span></div>
+    <div class="steps">
+      <div class="step s5"><div class="snum">1</div><div class="sbody"><div class="stitle">Nendi：核对银行付款</div><div class="sdesc">核对银行账户收款金额与订单一致后，在 Shopify 点击「确认付款」，回复「✓ Nendi 确认收款，#XXXX 可发货」。</div><div class="scode">付款确认后通知 Gani 安排发货</div></div><div class="swho"><span class="wt5">Nendi</span></div></div>
+      <div class="step s5"><div class="snum">2</div><div class="sbody"><div class="stitle">Gani：打包发货</div><div class="sdesc">按订单打包，录入物流单号至 Shopify，系统自动发送发货通知给主播。</div><div class="scode">发货时限：财务确认后 1 工作日内</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s5"><div class="snum">3</div><div class="sbody"><div class="stitle">Bailin：发送物流信息</div><div class="sdesc">发货后，Bailin 在 WhatsApp 群发送物流单号和预计到货时间。</div><div class="scode">格式：「#XXXX 已发出｜物流：XXXXXX｜预计到货：X月X日」</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 06</span><span class="sec-title">每周结算流程</span><span class="sec-who sw5">周末执行</span></div>
+    <div class="settle">
+      <div class="sc"><div class="sct">Nendi：周六汇总账单</div><div class="scs">每周六执行</div>
+        <div class="sci"><strong>1.</strong> Shopify 导出本周全部主播订单</div>
+        <div class="sci"><strong>2.</strong> 按主播分组核算订货总额</div>
+        <div class="sci"><strong>3.</strong> 确认已付 / 未付金额</div>
+        <div class="sci"><strong>4.</strong> 制作每人独立结算账单</div>
+        <div class="sci"><strong>5.</strong> WhatsApp 逐一发送给各主播</div>
+      </div>
+      <div class="sc"><div class="sct">主播：周日完成付款</div><div class="scs">结算截止 周日 23:59</div>
+        <div class="sci"><strong>1.</strong> 收到账单后核对金额</div>
+        <div class="sci"><strong>2.</strong> 有异议须 24 小时内提出</div>
+        <div class="sci"><strong>3.</strong> 无异议完成银行转账</div>
+        <div class="sci"><strong>4.</strong> 转账截图发 WhatsApp 给 Nendi</div>
+        <div class="sci"><strong>5.</strong> Nendi 确认收款完成结算</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">CALENDAR</span><span class="sec-title">每周操作时间轴</span><span class="sec-who sw-all">时间节点</span></div>
+    <div class="week">
+      <div class="wday"><div class="wname">周一</div><div class="ev ev1">主播可下单</div><div class="ev ev2">Bailin 收单</div></div>
+      <div class="wday"><div class="wname">周二</div><div class="ev ev1">主播可下单</div><div class="ev ev3">Gani 核库存</div></div>
+      <div class="wday"><div class="wname">周三</div><div class="ev ev1">主播可下单</div><div class="ev ev4">Marcia 审批</div></div>
+      <div class="wday"><div class="wname">周四</div><div class="ev ev1">主播可下单</div><div class="ev ev5">Nendi 核款</div></div>
+      <div class="wday"><div class="wname">周五</div><div class="ev ev1">主播可下单</div><div class="ev ev2">Bailin 跟进</div></div>
+      <div class="wday hl-red"><div class="wname">周六 ★</div><div class="ev ev-y">周末统一处理</div><div class="ev ev5">Nendi 汇总账单</div><div class="ev ev5">发送结算账单</div></div>
+      <div class="wday hl-green"><div class="wname">周日 ★</div><div class="ev ev1">主播确认付款</div><div class="ev ev5">Nendi 确认收款</div><div class="ev ev-y">结算截止 23:59</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">RULES</span><span class="sec-title">规则与时限一览</span><span class="sec-who sw-all">所有人遵守</span></div>
+    <table class="tbl"><thead><tr><th>事项</th><th>规则说明</th><th>时限</th></tr></thead><tbody>
+      <tr><td>主播下单</td><td>随时可在官网下单，周末统一批量处理。</td><td>全周开放</td></tr>
+      <tr><td>运营确认</td><td>收到通知后核对订单，有误立即通知主播修改。</td><td>4 小时内</td></tr>
+      <tr><td>仓库审核</td><td>确认库存可发货，不足立即反馈，不得擅自替换产品。</td><td>2 小时内</td></tr>
+      <tr><td>主管审批</td><td>审查合规性与折扣权限，特殊申请须书面说明。</td><td>4 小时内</td></tr>
+      <tr><td>财务确认</td><td>核对到账金额与订单一致，方可更新付款状态。</td><td>当日内</td></tr>
+      <tr><td>发货时限</td><td>财务确认后 1 工作日内发货，物流单号须录入 Shopify。</td><td>1 工作日</td></tr>
+      <tr><td>结算付款</td><td>转账截图发给 Nendi，逾期影响下周发货优先级。</td><td>周日 23:59</td></tr>
+      <tr><td>账单异议</td><td>收到账单 24 小时内提出，超时视为确认无异议。</td><td>24 小时内</td></tr>
+      <tr><td>退换货</td><td>收货 48 小时内拍照发 Gani 核实，确认后补发或退款。</td><td>收货 48h</td></tr>
+      <tr><td>折扣码</td><td>专属折扣码不得外泄，违规使用取消该账号折扣权限。</td><td>长期有效</td></tr>
+    </tbody></table>
+  </div>
+  <div class="sec"><div class="notice"><div class="ntitle">重要提示</div><ul>
+    <li>所有沟通以 WhatsApp 群消息为准（联系人：Bailin），口头约定不具效力</li>
+    <li>订单提交后 2 小时内可联系 Bailin 修改，超时不可修改</li>
+    <li>结算账单有异议须 24 小时内书面提出，超时视为确认</li>
+    <li>折扣码属商业机密，不得以任何形式对外分享</li>
+    <li>遇节假日，处理时间以群通知为准</li>
+    <li>本 SOP 如有更新，Marcia 将通过 WhatsApp 群提前告知</li>
+  </ul></div></div>
+</div>
+<div class="ftr"><span class="ftl">MARS COOLPLAY · MC-SOP-001 · V3.0 · 2025</span><span class="ftr-r">marscoolplay.com · 内部文件</span></div>
+</div>
+
+<!-- ═══════════════════════════════ ENGLISH ═══════════════════════════════ -->
+<div class="lang-section" id="lang-en">
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-brand">MARS CoolPlay</div>
+    <div class="hdr-meta">Doc No.: MC-SOP-001<br>Version: V3.0<br>Effective: 2025<br>For: All Partner Streamers</div>
+  </div>
+  <h1>Streamer Order<br><em>Standard Operating Procedure</em></h1>
+  <p class="hdr-sub">Complete SOP for weekly streamer ordering, 5-level approval, and weekly settlement. Ops: Bailin｜Warehouse: Gani｜Manager: Marcia｜Finance: Nendi</p>
+  <div class="hdr-badges">
+    <span class="badge b1">Streamer Order</span><span class="badge b2">Ops Confirm</span>
+    <span class="badge b3">Warehouse Check</span><span class="badge b4">Manager Approve</span><span class="badge b5">Finance Confirm</span>
+  </div>
+</div>
+<div class="body">
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">OVERVIEW</span><span class="sec-title">5-Level Approval Flow</span><span class="sec-who sw-all">Full Chain</span></div>
+    <div class="flow-wrap">
+      <div class="flow-label">Complete approval chain from order submission to shipment</div>
+      <div class="flow">
+        <div class="flow-step f1"><div class="fnum">1</div><div class="fname">Place Order</div><div class="frole">Streamer</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f2"><div class="fnum">2</div><div class="fname">Ops Confirm</div><div class="frole">Bailin</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f3"><div class="fnum">3</div><div class="fname">Stock Check</div><div class="frole">Gani</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f4"><div class="fnum">4</div><div class="fname">Approval</div><div class="frole">Marcia</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f5"><div class="fnum">5</div><div class="fname">Finance OK</div><div class="frole">Nendi</div></div>
+      </div>
+      <div class="flow-note">All approved → Ship → Streamer receives → Weekend settlement</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">ROLES</span><span class="sec-title">Role Responsibilities</span><span class="sec-who sw-all">RACI Matrix</span></div>
+    <div class="roles">
+      <div class="role"><div class="rdot rd1"></div><div class="rname">Streamer</div><div class="rtag">Streamer</div><div class="rduty">Self-order on website using exclusive discount code, then notify Bailin via WhatsApp.</div></div>
+      <div class="role"><div class="rdot rd2"></div><div class="rname">Bailin</div><div class="rtag">Operations</div><div class="rduty">Verify order details (products, qty, discount code), then forward to Gani for stock check.</div></div>
+      <div class="role"><div class="rdot rd3"></div><div class="rname">Gani</div><div class="rtag">Warehouse</div><div class="rduty">Confirm stock availability and shipping readiness, then forward to Marcia for approval.</div></div>
+      <div class="role"><div class="rdot rd4"></div><div class="rname">Marcia</div><div class="rtag">Manager</div><div class="rduty">Review compliance and discount permissions, then approve or reject the order.</div></div>
+      <div class="role"><div class="rdot rd5"></div><div class="rname">Nendi</div><div class="rtag">Finance</div><div class="rduty">Confirm payment received, update payment status, handle weekly settlement reconciliation.</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 01</span><span class="sec-title">Streamer Ordering Process</span><span class="sec-who sw1">Streamer</span></div>
+    <div class="steps">
+      <div class="step s1"><div class="snum">1</div><div class="sbody"><div class="stitle">Visit marscoolplay.com and select products</div><div class="sdesc">Browse available card products, select the variant (single pack / half box / full box) and quantity, then add to cart.</div><div class="scode">Orders accepted anytime · Processed on weekends</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">2</div><div class="sbody"><div class="stitle">Enter exclusive discount code at checkout</div><div class="sdesc">Enter your wholesale discount code in the discount field. Verify the price is correct before proceeding.</div><div class="scode">Code assigned by Marcia, non-transferable · Forgotten? Contact Bailin</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">3</div><div class="sbody"><div class="stitle">Fill in shipping details and submit order</div><div class="sdesc">Enter correct delivery address and phone number, select bank transfer as payment, submit. Record the order number.</div><div class="scode">Order number format: #XXXX</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">4</div><div class="sbody"><div class="stitle">Screenshot order and notify Bailin on WhatsApp</div><div class="sdesc">Take a screenshot of the order confirmation page and send to the streamer WhatsApp group to notify ops.</div><div class="scode">Format: "Order #XXXX | Product: XXX | Qty: XX | Amount: Rp XXX"</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 02</span><span class="sec-title">Operations Order Confirmation</span><span class="sec-who sw2">Bailin</span></div>
+    <div class="steps">
+      <div class="step s2"><div class="snum">1</div><div class="sbody"><div class="stitle">Log into Shopify to verify order details</div><div class="sdesc">After receiving the WhatsApp notification, log into Shopify admin and verify products, quantity, discount code, and shipping address match the notification.</div><div class="scode">Time limit: within 4 hours · If errors found, notify streamer immediately to resubmit</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+      <div class="step s2"><div class="snum">2</div><div class="sbody"><div class="stitle">Notify Gani for warehouse stock check</div><div class="sdesc">Once verified, notify Gani in the WhatsApp group to check stock, noting the order number and required delivery date.</div><div class="scode">No verbal changes accepted · All changes require streamer to resubmit</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 03</span><span class="sec-title">Warehouse Stock Check</span><span class="sec-who sw3">Gani</span></div>
+    <div class="steps">
+      <div class="step s3"><div class="snum">1</div><div class="sbody"><div class="stitle">Check stock availability for each SKU</div><div class="sdesc">Check stock levels in Shopify for every SKU in the order and confirm whether shipment can be fulfilled on time.</div><div class="scode">Time limit: within 2 hours · If stock insufficient, notify Bailin immediately</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s3"><div class="snum">2</div><div class="sbody"><div class="stitle">Report result to Bailin</div><div class="sdesc">Stock OK → Reply "✓ Stock confirmed, ready to ship" and forward to Marcia. Insufficient → Notify Bailin to contact streamer for order adjustment.</div><div class="scode">OK → Forward to Marcia · Insufficient → Return to Bailin</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 04</span><span class="sec-title">Manager Approval</span><span class="sec-who sw4">Marcia</span></div>
+    <div class="steps">
+      <div class="step s4"><div class="snum">1</div><div class="sbody"><div class="stitle">Review compliance and discount permissions</div><div class="sdesc">Confirm the discount code is within authorized limits, order amount and product category comply with the partnership agreement, and no irregularities exist.</div><div class="scode">Time limit: within 4 hours of receiving stock confirmation</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+      <div class="step s4"><div class="snum">2</div><div class="sbody"><div class="stitle">Approve or reject</div><div class="sdesc">Approved → Reply "✓ Manager approved" and forward to Nendi. Rejected → State reason clearly; Bailin notifies streamer.</div><div class="scode">Approved → Finance confirmation · Rejected → State reason and notify streamer</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 05</span><span class="sec-title">Finance Confirmation & Shipment</span><span class="sec-who sw5">Nendi + Gani</span></div>
+    <div class="steps">
+      <div class="step s5"><div class="snum">1</div><div class="sbody"><div class="stitle">Nendi: Verify bank payment</div><div class="sdesc">Verify the bank account has received the correct amount matching the order. Then update Shopify to "Payment confirmed" and reply "✓ Nendi confirmed payment, #XXXX ready to ship."</div><div class="scode">Notify Gani to arrange shipment after confirming payment</div></div><div class="swho"><span class="wt5">Nendi</span></div></div>
+      <div class="step s5"><div class="snum">2</div><div class="sbody"><div class="stitle">Gani: Pack and ship</div><div class="sdesc">Pack order, enter tracking number into Shopify. System automatically sends shipment notification to streamer.</div><div class="scode">Time limit: 1 business day after finance confirmation · Tracking number must be entered in Shopify</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s5"><div class="snum">3</div><div class="sbody"><div class="stitle">Bailin: Send tracking info on WhatsApp</div><div class="sdesc">After shipment, Bailin sends tracking number and estimated delivery date in the streamer WhatsApp group.</div><div class="scode">Format: "#XXXX shipped | Tracking: XXXXXX | ETA: DD/MM"</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 06</span><span class="sec-title">Weekly Settlement Process</span><span class="sec-who sw5">Weekend</span></div>
+    <div class="settle">
+      <div class="sc"><div class="sct">Nendi: Compile Settlement (Saturday)</div><div class="scs">Every Saturday</div>
+        <div class="sci"><strong>1.</strong> Export all streamer orders from Shopify</div>
+        <div class="sci"><strong>2.</strong> Group by streamer and calculate totals</div>
+        <div class="sci"><strong>3.</strong> Confirm paid / unpaid amounts</div>
+        <div class="sci"><strong>4.</strong> Create individual settlement statement per streamer</div>
+        <div class="sci"><strong>5.</strong> Send to each streamer via WhatsApp</div>
+      </div>
+      <div class="sc"><div class="sct">Streamer: Complete Payment (Sunday)</div><div class="scs">Deadline: Sunday 23:59</div>
+        <div class="sci"><strong>1.</strong> Review settlement statement received</div>
+        <div class="sci"><strong>2.</strong> Raise disputes within 24 hours if any</div>
+        <div class="sci"><strong>3.</strong> Complete bank transfer per statement amount</div>
+        <div class="sci"><strong>4.</strong> Send transfer screenshot to Nendi via WhatsApp</div>
+        <div class="sci"><strong>5.</strong> Nendi confirms receipt to complete settlement</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">CALENDAR</span><span class="sec-title">Weekly Operations Timeline</span><span class="sec-who sw-all">Key Dates</span></div>
+    <div class="week">
+      <div class="wday"><div class="wname">Mon</div><div class="ev ev1">Order open</div><div class="ev ev2">Bailin receives</div></div>
+      <div class="wday"><div class="wname">Tue</div><div class="ev ev1">Order open</div><div class="ev ev3">Gani checks stock</div></div>
+      <div class="wday"><div class="wname">Wed</div><div class="ev ev1">Order open</div><div class="ev ev4">Marcia approves</div></div>
+      <div class="wday"><div class="wname">Thu</div><div class="ev ev1">Order open</div><div class="ev ev5">Nendi confirms</div></div>
+      <div class="wday"><div class="wname">Fri</div><div class="ev ev1">Order open</div><div class="ev ev2">Bailin follows up</div></div>
+      <div class="wday hl-red"><div class="wname">Sat ★</div><div class="ev ev-y">Weekend processing</div><div class="ev ev5">Nendi compiles bills</div><div class="ev ev5">Send statements</div></div>
+      <div class="wday hl-green"><div class="wname">Sun ★</div><div class="ev ev1">Streamer pays</div><div class="ev ev5">Nendi confirms</div><div class="ev ev-y">Deadline 23:59</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">RULES</span><span class="sec-title">Rules & Time Limits</span><span class="sec-who sw-all">All Parties</span></div>
+    <table class="tbl"><thead><tr><th>Item</th><th>Rule</th><th>Deadline</th></tr></thead><tbody>
+      <tr><td>Ordering</td><td>Orders accepted anytime; processed in batch on weekends.</td><td>Always open</td></tr>
+      <tr><td>Ops confirm</td><td>Verify order after notification; notify streamer immediately if errors found.</td><td>4 hours</td></tr>
+      <tr><td>Stock check</td><td>Confirm stock is available; report shortage immediately; no unauthorized substitutions.</td><td>2 hours</td></tr>
+      <tr><td>Approval</td><td>Check compliance and discount limits; special requests must be in writing.</td><td>4 hours</td></tr>
+      <tr><td>Finance</td><td>Payment amount must match order before updating status.</td><td>Same day</td></tr>
+      <tr><td>Shipment</td><td>Ship within 1 business day of payment confirmation; enter tracking in Shopify.</td><td>1 biz day</td></tr>
+      <tr><td>Settlement</td><td>Send transfer screenshot to Nendi; late payment affects next week's priority.</td><td>Sun 23:59</td></tr>
+      <tr><td>Disputes</td><td>Raise disputes within 24 hours of receiving statement; silence = acceptance.</td><td>24 hours</td></tr>
+      <tr><td>Returns</td><td>Report quality issues within 48 hours of receipt with photos to Gani.</td><td>48h receipt</td></tr>
+      <tr><td>Discount code</td><td>Codes are confidential; unauthorized sharing results in immediate suspension.</td><td>Permanent</td></tr>
+    </tbody></table>
+  </div>
+  <div class="sec"><div class="notice"><div class="ntitle">Important Notes</div><ul>
+    <li>All communications via WhatsApp group are official (contact: Bailin); verbal agreements are not binding</li>
+    <li>Order changes must be requested within 2 hours of submission; after that, orders cannot be modified</li>
+    <li>Settlement disputes must be raised in writing within 24 hours; silence is deemed acceptance</li>
+    <li>Discount codes are confidential and must not be shared under any circumstances</li>
+    <li>Processing times may change during public holidays; group notifications take precedence</li>
+    <li>SOP updates will be announced by Marcia via WhatsApp group in advance</li>
+  </ul></div></div>
+</div>
+<div class="ftr"><span class="ftl">MARS COOLPLAY · MC-SOP-001 · V3.0 · 2025</span><span class="ftr-r">marscoolplay.com · Internal Document</span></div>
+</div>
+
+<!-- ══════════════════════════ BAHASA INDONESIA ══════════════════════════ -->
+<div class="lang-section" id="lang-id">
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-brand">MARS CoolPlay</div>
+    <div class="hdr-meta">No. Dokumen: MC-SOP-001<br>Versi: V3.0<br>Berlaku: 2025<br>Untuk: Semua Streamer Partner</div>
+  </div>
+  <h1>Pemesanan Streamer<br><em>Prosedur Operasional Standar</em></h1>
+  <p class="hdr-sub">SOP lengkap untuk pemesanan mingguan streamer, 5 tingkat persetujuan, dan penyelesaian mingguan. Ops: Bailin｜Gudang: Gani｜Manajer: Marcia｜Keuangan: Nendi</p>
+  <div class="hdr-badges">
+    <span class="badge b1">Streamer Pesan</span><span class="badge b2">Ops Konfirmasi</span>
+    <span class="badge b3">Gudang Cek</span><span class="badge b4">Manajer Setuju</span><span class="badge b5">Keuangan OK</span>
+  </div>
+</div>
+<div class="body">
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">OVERVIEW</span><span class="sec-title">Alur Persetujuan 5 Tingkat</span><span class="sec-who sw-all">Rantai Lengkap</span></div>
+    <div class="flow-wrap">
+      <div class="flow-label">Rantai persetujuan lengkap dari pengajuan pesanan hingga pengiriman</div>
+      <div class="flow">
+        <div class="flow-step f1"><div class="fnum">1</div><div class="fname">Buat Pesanan</div><div class="frole">Streamer</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f2"><div class="fnum">2</div><div class="fname">Konfirmasi Ops</div><div class="frole">Bailin</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f3"><div class="fnum">3</div><div class="fname">Cek Stok</div><div class="frole">Gani</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f4"><div class="fnum">4</div><div class="fname">Persetujuan</div><div class="frole">Marcia</div></div>
+        <div class="farrow">›</div>
+        <div class="flow-step f5"><div class="fnum">5</div><div class="fname">Konfirmasi Bayar</div><div class="frole">Nendi</div></div>
+      </div>
+      <div class="flow-note">Semua disetujui → Kirim → Streamer terima → Penyelesaian akhir pekan</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">ROLES</span><span class="sec-title">Tanggung Jawab Setiap Peran</span><span class="sec-who sw-all">Matriks Peran</span></div>
+    <div class="roles">
+      <div class="role"><div class="rdot rd1"></div><div class="rname">Streamer</div><div class="rtag">Streamer</div><div class="rduty">Pesan sendiri di website menggunakan kode diskon eksklusif, lalu beritahu Bailin via WhatsApp.</div></div>
+      <div class="role"><div class="rdot rd2"></div><div class="rname">Bailin</div><div class="rtag">Operasional</div><div class="rduty">Verifikasi detail pesanan (produk, jumlah, kode diskon), lalu teruskan ke Gani untuk cek stok.</div></div>
+      <div class="role"><div class="rdot rd3"></div><div class="rname">Gani</div><div class="rtag">Gudang</div><div class="rduty">Konfirmasi ketersediaan stok dan kesiapan pengiriman, lalu teruskan ke Marcia untuk persetujuan.</div></div>
+      <div class="role"><div class="rdot rd4"></div><div class="rname">Marcia</div><div class="rtag">Manajer</div><div class="rduty">Tinjau kepatuhan dan izin diskon, lalu setujui atau tolak pesanan.</div></div>
+      <div class="role"><div class="rdot rd5"></div><div class="rname">Nendi</div><div class="rtag">Keuangan</div><div class="rduty">Konfirmasi pembayaran diterima, perbarui status pembayaran, tangani rekonsiliasi penyelesaian mingguan.</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 01</span><span class="sec-title">Proses Pemesanan Streamer</span><span class="sec-who sw1">Streamer</span></div>
+    <div class="steps">
+      <div class="step s1"><div class="snum">1</div><div class="sbody"><div class="stitle">Kunjungi marscoolplay.com dan pilih produk</div><div class="sdesc">Telusuri produk kartu yang tersedia, pilih varian (1 pack / setengah box / 1 box) dan jumlah, tambahkan ke keranjang.</div><div class="scode">Pesanan bisa kapan saja · Diproses setiap akhir pekan</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">2</div><div class="sbody"><div class="stitle">Masukkan kode diskon eksklusif saat checkout</div><div class="sdesc">Masukkan kode diskon grosir kamu di kolom diskon. Pastikan harga sudah benar sebelum melanjutkan.</div><div class="scode">Kode ditetapkan oleh Marcia, tidak boleh dipinjam · Lupa kode? Hubungi Bailin</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">3</div><div class="sbody"><div class="stitle">Isi info pengiriman dan submit pesanan</div><div class="sdesc">Isi alamat pengiriman dan nomor telepon yang benar, pilih transfer bank sebagai pembayaran, submit. Catat nomor pesanan.</div><div class="scode">Format nomor pesanan: #XXXX</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+      <div class="step s1"><div class="snum">4</div><div class="sbody"><div class="stitle">Screenshot pesanan dan beritahu Bailin di WhatsApp</div><div class="sdesc">Ambil screenshot halaman konfirmasi pesanan dan kirim ke grup WhatsApp streamer untuk memberitahu operasional.</div><div class="scode">Format: "Pesanan #XXXX | Produk: XXX | Jumlah: XX | Total: Rp XXX"</div></div><div class="swho"><span class="wt1">Streamer</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 02</span><span class="sec-title">Konfirmasi Pesanan oleh Operasional</span><span class="sec-who sw2">Bailin</span></div>
+    <div class="steps">
+      <div class="step s2"><div class="snum">1</div><div class="sbody"><div class="stitle">Login Shopify untuk verifikasi detail pesanan</div><div class="sdesc">Setelah menerima notifikasi WhatsApp, login ke Shopify admin dan verifikasi produk, jumlah, kode diskon, dan alamat pengiriman.</div><div class="scode">Batas waktu: dalam 4 jam · Jika ada kesalahan, beritahu streamer segera untuk mengajukan ulang</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+      <div class="step s2"><div class="snum">2</div><div class="sbody"><div class="stitle">Beritahu Gani untuk cek stok gudang</div><div class="sdesc">Setelah diverifikasi, beritahu Gani di grup WhatsApp untuk mengecek stok, sertakan nomor pesanan dan tanggal pengiriman yang dibutuhkan.</div><div class="scode">Perubahan lisan tidak diterima · Semua perubahan harus diajukan ulang oleh streamer</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 03</span><span class="sec-title">Pengecekan Stok Gudang</span><span class="sec-who sw3">Gani</span></div>
+    <div class="steps">
+      <div class="step s3"><div class="snum">1</div><div class="sbody"><div class="stitle">Cek ketersediaan stok setiap SKU</div><div class="sdesc">Cek stok setiap SKU dalam pesanan di Shopify dan konfirmasi apakah pengiriman bisa dilakukan tepat waktu.</div><div class="scode">Batas waktu: dalam 2 jam · Jika stok kurang, segera beritahu Bailin</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s3"><div class="snum">2</div><div class="sbody"><div class="stitle">Laporkan hasil ke Bailin</div><div class="sdesc">Stok cukup → Balas "✓ Stok terkonfirmasi, siap kirim" dan teruskan ke Marcia. Stok kurang → Beritahu Bailin untuk menghubungi streamer.</div><div class="scode">Cukup → Teruskan ke Marcia · Kurang → Kembalikan ke Bailin</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 04</span><span class="sec-title">Persetujuan Manajer</span><span class="sec-who sw4">Marcia</span></div>
+    <div class="steps">
+      <div class="step s4"><div class="snum">1</div><div class="sbody"><div class="stitle">Tinjau kepatuhan dan izin diskon</div><div class="sdesc">Konfirmasi kode diskon dalam batas yang diizinkan, jumlah pesanan dan kategori produk sesuai perjanjian kerjasama, tidak ada ketidakwajaran.</div><div class="scode">Batas waktu: dalam 4 jam setelah konfirmasi stok</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+      <div class="step s4"><div class="snum">2</div><div class="sbody"><div class="stitle">Setujui atau tolak</div><div class="sdesc">Disetujui → Balas "✓ Disetujui manajer" dan teruskan ke Nendi. Ditolak → Nyatakan alasan dengan jelas; Bailin memberitahu streamer.</div><div class="scode">Disetujui → Konfirmasi keuangan · Ditolak → Nyatakan alasan dan beritahu streamer</div></div><div class="swho"><span class="wt4">Marcia</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 05</span><span class="sec-title">Konfirmasi Keuangan & Pengiriman</span><span class="sec-who sw5">Nendi + Gani</span></div>
+    <div class="steps">
+      <div class="step s5"><div class="snum">1</div><div class="sbody"><div class="stitle">Nendi: Verifikasi pembayaran bank</div><div class="sdesc">Verifikasi rekening bank telah menerima jumlah yang sesuai dengan pesanan. Perbarui Shopify ke "Pembayaran dikonfirmasi" dan balas "✓ Nendi konfirmasi pembayaran, #XXXX siap dikirim."</div><div class="scode">Beritahu Gani untuk mengatur pengiriman setelah konfirmasi</div></div><div class="swho"><span class="wt5">Nendi</span></div></div>
+      <div class="step s5"><div class="snum">2</div><div class="sbody"><div class="stitle">Gani: Packing dan kirim</div><div class="sdesc">Packing pesanan, masukkan nomor resi ke Shopify. Sistem otomatis mengirim notifikasi pengiriman ke streamer.</div><div class="scode">Batas waktu: 1 hari kerja setelah konfirmasi keuangan · Nomor resi wajib diinput di Shopify</div></div><div class="swho"><span class="wt3">Gani</span></div></div>
+      <div class="step s5"><div class="snum">3</div><div class="sbody"><div class="stitle">Bailin: Kirim info pengiriman di WhatsApp</div><div class="sdesc">Setelah pengiriman, Bailin mengirimkan nomor resi dan estimasi tiba di grup WhatsApp streamer.</div><div class="scode">Format: "#XXXX dikirim | Resi: XXXXXX | Estimasi tiba: DD/MM"</div></div><div class="swho"><span class="wt2">Bailin</span></div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">STEP 06</span><span class="sec-title">Proses Penyelesaian Mingguan</span><span class="sec-who sw5">Akhir Pekan</span></div>
+    <div class="settle">
+      <div class="sc"><div class="sct">Nendi: Kompilasi Tagihan (Sabtu)</div><div class="scs">Setiap Sabtu</div>
+        <div class="sci"><strong>1.</strong> Export semua pesanan streamer minggu ini dari Shopify</div>
+        <div class="sci"><strong>2.</strong> Kelompokkan per streamer dan hitung total</div>
+        <div class="sci"><strong>3.</strong> Konfirmasi jumlah sudah / belum dibayar</div>
+        <div class="sci"><strong>4.</strong> Buat tagihan penyelesaian individual per streamer</div>
+        <div class="sci"><strong>5.</strong> Kirim ke masing-masing streamer via WhatsApp</div>
+      </div>
+      <div class="sc"><div class="sct">Streamer: Selesaikan Pembayaran (Minggu)</div><div class="scs">Batas: Minggu 23:59</div>
+        <div class="sci"><strong>1.</strong> Tinjau tagihan yang diterima</div>
+        <div class="sci"><strong>2.</strong> Ajukan keberatan dalam 24 jam jika ada</div>
+        <div class="sci"><strong>3.</strong> Lakukan transfer bank sesuai jumlah tagihan</div>
+        <div class="sci"><strong>4.</strong> Kirim screenshot transfer ke Nendi via WhatsApp</div>
+        <div class="sci"><strong>5.</strong> Nendi konfirmasi penerimaan untuk menyelesaikan</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">CALENDAR</span><span class="sec-title">Timeline Operasional Mingguan</span><span class="sec-who sw-all">Jadwal</span></div>
+    <div class="week">
+      <div class="wday"><div class="wname">Sen</div><div class="ev ev1">Buka pesanan</div><div class="ev ev2">Bailin terima</div></div>
+      <div class="wday"><div class="wname">Sel</div><div class="ev ev1">Buka pesanan</div><div class="ev ev3">Gani cek stok</div></div>
+      <div class="wday"><div class="wname">Rab</div><div class="ev ev1">Buka pesanan</div><div class="ev ev4">Marcia setujui</div></div>
+      <div class="wday"><div class="wname">Kam</div><div class="ev ev1">Buka pesanan</div><div class="ev ev5">Nendi konfirmasi</div></div>
+      <div class="wday"><div class="wname">Jum</div><div class="ev ev1">Buka pesanan</div><div class="ev ev2">Bailin follow up</div></div>
+      <div class="wday hl-red"><div class="wname">Sab ★</div><div class="ev ev-y">Proses akhir pekan</div><div class="ev ev5">Nendi kompilasi</div><div class="ev ev5">Kirim tagihan</div></div>
+      <div class="wday hl-green"><div class="wname">Min ★</div><div class="ev ev1">Streamer bayar</div><div class="ev ev5">Nendi konfirmasi</div><div class="ev ev-y">Batas 23:59</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="sec-n">RULES</span><span class="sec-title">Aturan & Batas Waktu</span><span class="sec-who sw-all">Semua Pihak</span></div>
+    <table class="tbl"><thead><tr><th>Item</th><th>Aturan</th><th>Batas Waktu</th></tr></thead><tbody>
+      <tr><td>Pemesanan</td><td>Pesanan diterima kapan saja; diproses secara batch setiap akhir pekan.</td><td>Selalu buka</td></tr>
+      <tr><td>Konfirmasi ops</td><td>Verifikasi pesanan setelah notifikasi; beritahu streamer segera jika ada kesalahan.</td><td>4 jam</td></tr>
+      <tr><td>Cek stok</td><td>Konfirmasi stok tersedia; laporkan kekurangan segera; tidak boleh substitusi tanpa izin.</td><td>2 jam</td></tr>
+      <tr><td>Persetujuan</td><td>Cek kepatuhan dan batas diskon; permintaan khusus harus tertulis.</td><td>4 jam</td></tr>
+      <tr><td>Keuangan</td><td>Jumlah pembayaran harus sesuai pesanan sebelum memperbarui status.</td><td>Hari yang sama</td></tr>
+      <tr><td>Pengiriman</td><td>Kirim dalam 1 hari kerja setelah konfirmasi pembayaran; masukkan resi ke Shopify.</td><td>1 hari kerja</td></tr>
+      <tr><td>Penyelesaian</td><td>Kirim screenshot transfer ke Nendi; keterlambatan memengaruhi prioritas minggu depan.</td><td>Minggu 23:59</td></tr>
+      <tr><td>Keberatan</td><td>Ajukan keberatan dalam 24 jam setelah menerima tagihan; diam = setuju.</td><td>24 jam</td></tr>
+      <tr><td>Retur</td><td>Laporkan masalah kualitas dalam 48 jam setelah terima barang dengan foto ke Gani.</td><td>48j setelah terima</td></tr>
+      <tr><td>Kode diskon</td><td>Kode bersifat rahasia; berbagi tanpa izin mengakibatkan penangguhan segera.</td><td>Permanen</td></tr>
+    </tbody></table>
+  </div>
+  <div class="sec"><div class="notice"><div class="ntitle">Catatan Penting</div><ul>
+    <li>Semua komunikasi via grup WhatsApp bersifat resmi (kontak: Bailin); perjanjian lisan tidak mengikat</li>
+    <li>Perubahan pesanan harus diminta dalam 2 jam setelah submit; setelah itu pesanan tidak bisa diubah</li>
+    <li>Keberatan penyelesaian harus diajukan secara tertulis dalam 24 jam; diam dianggap setuju</li>
+    <li>Kode diskon bersifat rahasia dan tidak boleh dibagikan dalam keadaan apapun</li>
+    <li>Waktu pemrosesan dapat berubah saat hari libur; notifikasi grup lebih diutamakan</li>
+    <li>Pembaruan SOP akan diumumkan oleh Marcia via grup WhatsApp sebelumnya</li>
+  </ul></div></div>
+</div>
+<div class="ftr"><span class="ftl">MARS COOLPLAY · MC-SOP-001 · V3.0 · 2025</span><span class="ftr-r">marscoolplay.com · Dokumen Internal</span></div>
+</div>
+
+<script>
+function switchLang(lang) {
+  document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('lang-' + lang).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
